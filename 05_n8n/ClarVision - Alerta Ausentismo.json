@@ -1,0 +1,174 @@
+{
+  "name": "ClarVision - Alerta Ausentismo",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -352,
+        -32
+      ],
+      "id": "b4314bcd-406b-44ed-a0eb-ffffd5ff6370",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    semana,\n    inicio_semana,\n    total_turnos,\n    ausentes,\n    tasa_ausentismo\nFROM vw_kpi_semanal\nWHERE tasa_ausentismo > 20\nORDER BY semana DESC\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "7d6d6f0f-0b46-40c9-bfa9-43ba9846ec06",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "mySql": {
+          "id": "cCC9fq18D1PhVwgX",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eadb3d48-24e5-4a65-bbc3-039a98bec7fc",
+              "leftValue": "={{ Number($json.tasa_ausentismo) }}",
+              "rightValue": 20,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        -32
+      ],
+      "id": "8e28a455-67e8-48e2-84e0-99e6aabe3379",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        256,
+        16
+      ],
+      "id": "a364d8ed-d591-4709-b16b-b29f656ce006",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U0A12T8AFU0",
+          "mode": "id"
+        },
+        "text": "=ClarVision BI — Alerta Crítica\n\nSemana: {{ $json.semana }}\nTasa de ausentismo: {{ $json.tasa_ausentismo }}%\nAusentes: {{ $json.ausentes }} / {{ $json.total_turnos }} turnos\n\nAcción requerida: revisar agenda de la semana.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        288,
+        -176
+      ],
+      "id": "3b12e99c-5ce3-476e-b7ce-7e7d3956d15f",
+      "name": "Send a message",
+      "webhookId": "ddb16565-cf4e-4c7a-9b86-7a45129f72d9",
+      "credentials": {
+        "slackApi": {
+          "id": "itK0Phz1ZPmxYK3e",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b13c79f1-9d57-414c-9e78-ea5bea70ff39",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a9a5dc3326ecae4b3adb9c98d6bdeb0613c34b830d490e0d1fbe9c84bbf9ec57"
+  },
+  "id": "PFd7AW9l0GC6blTe",
+  "tags": []
+}

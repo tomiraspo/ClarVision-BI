@@ -1,0 +1,112 @@
+{
+  "name": "ClarVision - Reporte Semanal",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        -32
+      ],
+      "id": "edc65428-e3d7-40f9-90be-2573dc451871",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    periodo,\n    total_turnos,\n    completados,\n    ausentes,\n    cancelados,\n    tasa_ausentismo,\n    tasa_cancelacion\nFROM vw_turnos_mensual\nORDER BY periodo DESC\nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        -80,
+        -32
+      ],
+      "id": "2cbc1cb9-8d66-499f-8d65-c364644bf794",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "mySql": {
+          "id": "cCC9fq18D1PhVwgX",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U0A12T8AFU0",
+          "mode": "id"
+        },
+        "text": "=ClarVision BI — Reporte Semanal\n\nPeríodo: {{ $json.periodo }}\nTotal turnos: {{ $json.total_turnos }}\nCompletados: {{ $json.completados }}\nAusentes: {{ $json.ausentes }}\nCancelados: {{ $json.cancelados }}\nTasa ausentismo: {{ $json.tasa_ausentismo }}%\nTasa cancelación: {{ $json.tasa_cancelacion }}%",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        176,
+        -32
+      ],
+      "id": "c8edeefa-fee9-4435-b819-b0814d9bf243",
+      "name": "Send a message",
+      "webhookId": "4fdc6686-b928-4129-b94c-806ebf4698a0",
+      "credentials": {
+        "slackApi": {
+          "id": "itK0Phz1ZPmxYK3e",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "73637599-a695-44a5-bb1f-b40badda0785",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a9a5dc3326ecae4b3adb9c98d6bdeb0613c34b830d490e0d1fbe9c84bbf9ec57"
+  },
+  "id": "lgdcScM0LkekVYCF",
+  "tags": []
+}
