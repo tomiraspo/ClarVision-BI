@@ -103,6 +103,8 @@ Se ejecuta todos los lunes a las 8am. Envía un resumen completo de los KPIs de 
 
 ![Workflow Reporte](06_docs/%E2%96%B6%EF%B8%8F%20My%20workflow%20-%20n8n%20-%20Google%20Chrome%205_3_2026%2023_58_32.png)
 
+> Los archivos de configuración de los workflows están disponibles bajo solicitud.
+
 ---
 
 ## Estructura del Repositorio
@@ -118,15 +120,13 @@ ClarVision-BI/
 │   └── kpi_*.csv / .xlsx   # Exportaciones de cada KPI para análisis
 ├── 04_powerbi/
 │   └── clarvision.pbix     # Dashboard interactivo conectado a MySQL
-├── 05_n8n/
-│   ├── workflow_alerta_ausentismo.json
-│   └── workflow_reporte_semanal.json
+├── 05_n8n/                 # Workflows disponibles bajo solicitud
 └── 06_docs/
-    ├── Power BI Desktop 5_3_2026 23_56_30.png
+    ├── dashboard_clarvision.png
     ├── clarvision.pdf
-    ├── Diagrama de trabajo.drawio.png
-    ├── My workflow - n8n - Google Chrome 5_3_2026 23_58_14.png
-    └── My workflow - n8n - Google Chrome 5_3_2026 23_58_32.png
+    ├── workflow_alerta.png
+    ├── workflow_reporte.png
+    └── modelo_datos.png
 ```
 
 ---
@@ -153,8 +153,6 @@ source 02_queries/kpi_queries.sql
 ```
 
 Para el dashboard abrir `04_powerbi/clarvision.pbix` con Power BI Desktop y actualizar la conexión a MySQL con las credenciales locales.
-
-Para los workflows importar los archivos JSON de `05_n8n/` en una instancia de n8n y configurar las credenciales de MySQL y Slack.
 
 ---
 
