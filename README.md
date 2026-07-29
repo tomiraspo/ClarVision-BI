@@ -1,3 +1,4 @@
+**[Versión en Ingles](README.en.md)**
 # ClarVision BI — Inteligencia Operacional para Clínica Oftalmológica
 
 > Sistema de Business Intelligence end-to-end diseñado para reducir el ausentismo y optimizar la operación de una clínica oftalmológica. Construido con MySQL, Power BI y automatización con n8n.
