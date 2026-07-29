@@ -51,3 +51,6 @@ MySQL (clarvision_db)
         │                   └── Automated Weekly Report → Slack
         │
         └── Excel (Validation & Data Exploration)
+## Model data
+<img width="771" height="631" alt="Diagrama de trabajo drawio" src="https://github.com/user-attachments/assets/e91374fe-9a34-4bd0-a332-1faa7e17d769" />
+
